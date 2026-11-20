@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wireframe — App Multiplataforma</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F0F0F0;
+  --surface: #FFFFFF;
+  --surface-2: #E8E8E8;
+  --border: #BDBDBD;
+  --border-dark: #888888;
+  --text: #333333;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --placeholder: #CCCCCC;
+  --sidebar-bg: #2B2B2B;
+  --sidebar-text: #CCCCCC;
+  --sidebar-active: #555555;
+  --accent-wf: #777777;
+  --sidebar-w: 200px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-size: 12px;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  padding: 16px 14px 12px;
+  border-bottom: 1px solid #444;
+}
+
+.brand-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.2px;
+}
+.brand-org { font-size: 10px; color: #777; margin-top: 2px; }
+
+.sidebar-section { padding: 12px 8px 4px; }
+
+.sidebar-section-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: #555;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0 6px;
+  margin-bottom: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--sidebar-text);
+  font-size: 12px;
+  font-weight: 400;
+  margin-bottom: 1px;
+  border: 1px solid transparent;
+}
+
+.nav-item:hover { background: #3a3a3a; }
+.nav-item.active { background: var(--sidebar-active); color: #fff; border-color: #666; }
+
+.nav-icon { width: 14px; height: 14px; opacity: 0.7; flex-shrink: 0; }
+.nav-item.active .nav-icon { opacity: 1; }
+
+.nav-badge {
+  margin-left: auto;
+  background: #555;
+  color: #ccc;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 8px;
+  border: 1px solid #666;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 10px 8px;
+  border-top: 1px solid #444;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #444;
+}
+
+.avatar-wf {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #555;
+  border: 1px solid #777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 600;
+  color: #ccc;
+  flex-shrink: 0;
+}
+
+.user-name { font-size: 11px; color: #ccc; }
+.user-role { font-size: 9px; color: #666; }
+
+/* ── TOPBAR ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.topbar {
+  height: 44px;
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.topbar-title { font-size: 13px; font-weight: 600; color: var(--text); }
+
+.search-box {
+  flex: 1;
+  max-width: 280px;
+  margin-left: auto;
+  height: 26px;
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.icon-btn-wf {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  position: relative;
+}
+
+.notif-dot {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #888;
+  border: 1.5px solid var(--surface);
+}
+
+/* ── CONTENT ── */
+.content { flex: 1; overflow-y: auto; padding: 18px; }
+
+.screen { display: none; animation: fadeIn 0.15s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── WIREFRAME ELEMENTS ── */
+.wf-box {
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface);
+}
+
+.wf-placeholder {
+  border: 1.5px solid var(--placeholder);
+  border-radius: 2px;
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.wf-placeholder::before,
+.wf-placeholder::after {
+  content: '';
+  position: absolute;
+  background: var(--placeholder);
+  height: 1px;
+}
+
+.wf-placeholder::before {
+  width: 141%;
+  transform-origin: left center;
+  transform: rotate(atan2(1, 1));
+  left: -20%;
+}
+
+.wf-placeholder::after {
+  width: 141%;
+  transform-origin: left center;
+  transform: rotate(calc(-1 * atan2(1, 1)));
+  right: -20%;
+}
+
+/* X cross for image placeholders */
+.wf-img {
+  border: 1.5px solid var(--border-dark);
+  background: var(--surface-2);
+  position: relative;
+  overflow: hidden;
+}
+
+.wf-img::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--placeholder) calc(50% - 0.5px), var(--placeholder) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    linear-gradient(to bottom left, transparent calc(50% - 0.5px), var(--placeholder) calc(50% - 0.5px), var(--placeholder) calc(50% + 0.5px), transparent calc(50% + 0.5px));
+}
+
+.wf-line {
+  height: 8px;
+  background: var(--placeholder);
+  border-radius: 2px;
+  margin-bottom: 5px;
+}
+
+.wf-line.short { width: 60%; }
+.wf-line.medium { width: 80%; }
+.wf-line.full { width: 100%; }
+.wf-line.xshort { width: 35%; }
+
+.wf-btn {
+  height: 24px;
+  border: 1.5px solid var(--border-dark);
+  border-radius: 2px;
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+.wf-btn.primary {
+  background: var(--accent-wf);
+  color: #fff;
+  border-color: var(--border-dark);
+}
+
+.wf-input {
+  height: 24px;
+  border: 1.5px solid var(--border);
+  border-radius: 2px;
+  background: var(--surface);
+  padding: 0 8px;
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+}
+
+.section-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.panel-header-wf {
+  padding: 8px 12px;
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-title-wf { font-size: 11px; font-weight: 600; color: var(--text); }
+.panel-link { font-size: 10px; color: var(--text-muted); text-decoration: underline; cursor: pointer; }
+
+/* ── DASHBOARD ── */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.metric-card-wf {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  padding: 12px;
+}
+
+.metric-num {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 6px 0 4px;
+  line-height: 1;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 12px;
+}
+
+.activity-row-wf {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+}
+
+.activity-row-wf:last-child { border-bottom: none; }
+
+.dot-wf {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-dark);
+  flex-shrink: 0;
+}
+
+.mini-task-wf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mini-task-wf:last-child { border-bottom: none; }
+
+.check-wf {
+  width: 13px;
+  height: 13px;
+  border: 1.5px solid var(--border-dark);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.pill-wf {
+  margin-left: auto;
+  font-size: 9px;
+  padding: 2px 6px;
+  border: 1px solid var(--border-dark);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* ── CHAT ── */
+.chat-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  height: calc(100vh - 90px);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.channel-list-wf { border-right: 1.5px solid var(--border); overflow-y: auto; }
+
+.channel-item-wf {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.channel-item-wf.active {
+  background: var(--surface-2);
+  font-weight: 600;
+  color: var(--text);
+  border-left: 3px solid var(--border-dark);
+}
+
+.ch-hash { color: var(--text-muted); font-size: 12px; }
+.ch-badge { margin-left: auto; font-size: 9px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 1px 5px; }
+
+.chat-main-wf { display: flex; flex-direction: column; }
+
+.chat-header-wf {
+  padding: 10px 14px;
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-messages-wf {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.msg-wf { display: flex; gap: 8px; }
+
+.msg-av-wf {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-dark);
+  background: var(--surface-2);
+  flex-shrink: 0;
+}
+
+.msg-body-wf { flex: 1; }
+.msg-name-wf { font-size: 10px; font-weight: 600; margin-bottom: 3px; }
+.msg-bubble {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 7px 10px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.msg-action-wf {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 5px;
+  padding: 3px 8px;
+  border: 1px dashed var(--border-dark);
+  border-radius: 2px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.chat-input-wf {
+  padding: 10px 14px;
+  border-top: 1.5px solid var(--border);
+  display: flex;
+  gap: 8px;
+}
+
+/* ── TAREAS ── */
+.kanban {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.kanban-col-wf {
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.kanban-header-wf {
+  padding: 8px 10px;
+  border-bottom: 1.5px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.col-dot-wf {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-dark);
+  flex-shrink: 0;
+}
+
+.col-count-wf {
+  margin-left: auto;
+  font-size: 9px;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  border-radius: 8px;
+}
+
+.kanban-cards-wf { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+
+.k-card-wf {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 2px;
+  padding: 8px 10px;
+}
+
+.k-card-meta-wf { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+
+/* ── MODO AGENTE ── */
+.agent-layout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 12px;
+  height: calc(100vh - 130px);
+}
+
+/* Terminal */
+.agent-terminal-wf {
+  border: 1.5px solid var(--border-dark);
+  border-radius: 3px;
+  background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.term-header-wf {
+  padding: 8px 12px;
+  background: #2a2a2a;
+  border-bottom: 1px solid #444;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.term-dots-wf { display: flex; gap: 5px; }
+.term-dot-wf {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid #555;
+  background: #3a3a3a;
+}
+
+.term-title { font-size: 10px; color: #777; font-family: monospace; }
+.term-status { margin-left: auto; font-size: 10px; color: #888; display: flex; align-items: center; gap: 5px; font-family: monospace; }
+.term-pulse { width: 6px; height: 6px; border-radius: 50%; background: #666; border: 1px solid #888; }
+
+.term-body-wf {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  font-family: monospace;
+  font-size: 11.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.term-line { display: flex; gap: 8px; color: #888; }
+.term-prefix { color: #666; flex-shrink: 0; }
+.term-user .term-prefix { color: #aaa; }
+.term-text { color: #999; line-height: 1.5; }
+
+.term-confirm {
+  border: 1px dashed #666;
+  border-radius: 3px;
+  padding: 10px 12px;
+  background: #222;
+  margin: 2px 0;
+}
+
+.term-confirm-title { font-size: 10px; color: #aaa; margin-bottom: 8px; }
+.term-code { font-size: 10.5px; color: #777; margin-bottom: 8px; line-height: 1.6; }
+
+.term-btns { display: flex; gap: 8px; }
+.term-btn {
+  padding: 4px 10px;
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #555;
+  font-family: monospace;
+  background: #333;
+  color: #aaa;
+}
+
+/* ── VOZ ── */
+.voice-bar {
+  padding: 10px 14px;
+  border-top: 1.5px solid #444;
+  background: #222;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.voice-label {
+  font-size: 9px;
+  color: #666;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-family: monospace;
+}
+
+.voice-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mic-btn-wf {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid #555;
+  background: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.mic-btn-wf.active {
+  border-color: #888;
+  background: #444;
+}
+
+.waveform {
+  flex: 1;
+  height: 32px;
+  border: 1px solid #444;
+  border-radius: 2px;
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 2px;
+}
+
+.wf-bar {
+  width: 3px;
+  border-radius: 2px;
+  background: #555;
+  flex-shrink: 0;
+}
+
+.voice-status { font-size: 9px; color: #666; font-family: monospace; }
+
+.text-input-row {
+  display: flex;
+  gap: 6px;
+}
+
+.term-input-wf {
+  flex: 1;
+  height: 26px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 2px;
+  font-family: monospace;
+  font-size: 11px;
+  color: #888;
+  padding: 0 8px;
+  outline: none;
+}
+
+/* Sidebar del agente */
+.agent-side-wf {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agent-panel-wf {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.perm-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.perm-item:last-child { border-bottom: none; }
+
+.toggle-wf {
+  width: 28px;
+  height: 15px;
+  border: 1.5px solid var(--border-dark);
+  border-radius: 8px;
+  background: var(--surface-2);
+  position: relative;
+}
+
+.toggle-wf::after {
+  content: '';
+  position: absolute;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--border-dark);
+  top: 1px;
+}
+
+.toggle-wf.on { background: var(--surface-2); }
+.toggle-wf.on::after { right: 1px; }
+.toggle-wf.off::after { left: 1px; }
+
+.action-item-wf {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.action-item-wf:last-child { border-bottom: none; }
+
+/* ── EDITOR ── */
+.editor-layout {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 12px;
+  height: calc(100vh - 90px);
+}
+
+.editor-main-wf {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-toolbar-wf {
+  padding: 7px 12px;
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface-2);
+}
+
+.tool-wf {
+  padding: 3px 7px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  background: var(--surface);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tool-wf.active { background: var(--border-dark); color: #fff; border-color: var(--border-dark); }
+.tool-divider-wf { width: 1px; height: 16px; background: var(--border); margin: 0 2px; }
+
+.editor-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 36px;
+}
+
+.doc-title-wf {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+
+.doc-meta-wf {
+  display: flex;
+  gap: 10px;
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-suggestion-wf {
+  border: 1px dashed var(--border-dark);
+  border-radius: 2px;
+  padding: 8px 12px;
+  margin: 12px 0;
+  font-size: 10px;
+  color: var(--text-secondary);
+  background: var(--surface-2);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.ai-panel-wf {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ai-messages-wf {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ai-msg-wf {
+  padding: 7px 9px;
+  border-radius: 2px;
+  font-size: 10px;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.ai-msg-wf.bot { background: var(--surface-2); align-self: flex-start; max-width: 90%; }
+.ai-msg-wf.user { background: var(--border); align-self: flex-end; max-width: 90%; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+svg.wf-ic { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-name">[Logo / Nombre app]</div>
+    <div class="brand-org">Empresa Demo S.A.S</div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Principal</div>
+    <div class="nav-item active" onclick="showScreen('dashboard',this)">
+      <svg class="nav-icon wf-ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" onclick="showScreen('chat',this)">
+      <svg class="nav-icon wf-ic" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Mensajería
+      <span class="nav-badge">5</span>
+    </div>
+    <div class="nav-item" onclick="showScreen('tasks',this)">
+      <svg class="nav-icon wf-ic" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Tareas
+    </div>
+    <div class="nav-item" onclick="showScreen('editor',this)">
+      <svg class="nav-icon wf-ic" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Documentos
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Avanzado</div>
+    <div class="nav-item" onclick="showScreen('agent',this)">
+      <svg class="nav-icon wf-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Modo Agente
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Org.</div>
+    <div class="nav-item">
+      <svg class="nav-icon wf-ic" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Equipo
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon wf-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      Configuración
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-row">
+      <div class="avatar-wf">LR</div>
+      <div>
+        <div class="user-name">Leonel R.</div>
+        <div class="user-role">Administrador</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="search-box">
+      <svg class="wf-ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Buscar en el espacio de trabajo…
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <div class="icon-btn-wf">
+        <svg class="wf-ic" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="icon-btn-wf">
+        <svg class="wf-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="screen active" id="screen-dashboard">
+      <div class="metrics-row">
+        <div class="metric-card-wf">
+          <div class="section-label">Tareas activas</div>
+          <div class="metric-num">24</div>
+          <div class="wf-line xshort"></div>
+        </div>
+        <div class="metric-card-wf">
+          <div class="section-label">Mensajes sin leer</div>
+          <div class="metric-num">5</div>
+          <div class="wf-line xshort"></div>
+        </div>
+        <div class="metric-card-wf">
+          <div class="section-label">Proyectos en curso</div>
+          <div class="metric-num">7</div>
+          <div class="wf-line xshort"></div>
+        </div>
+        <div class="metric-card-wf">
+          <div class="section-label">Miembros activos</div>
+          <div class="metric-num">12</div>
+          <div class="wf-line xshort"></div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="wf-box">
+          <div class="panel-header-wf">
+            <span class="panel-title-wf">Actividad reciente</span>
+            <span class="panel-link">Ver todo →</span>
+          </div>
+          <div>
+            <div class="activity-row-wf">
+              <div class="dot-wf"></div>
+              <div style="flex:1"><div class="wf-line medium" style="margin-bottom:3px"></div><div class="wf-line xshort" style="margin-bottom:0"></div></div>
+              <div style="font-size:9px;color:var(--text-muted)">12 min</div>
+            </div>
+            <div class="activity-row-wf">
+              <div class="dot-wf"></div>
+              <div style="flex:1"><div class="wf-line full" style="margin-bottom:3px"></div><div class="wf-line short" style="margin-bottom:0"></div></div>
+              <div style="font-size:9px;color:var(--text-muted)">38 min</div>
+            </div>
+            <div class="activity-row-wf">
+              <div class="dot-wf"></div>
+              <div style="flex:1"><div class="wf-line medium" style="margin-bottom:3px"></div><div class="wf-line xshort" style="margin-bottom:0"></div></div>
+              <div style="font-size:9px;color:var(--text-muted)">1 h</div>
+            </div>
+            <div class="activity-row-wf">
+              <div class="dot-wf"></div>
+              <div style="flex:1"><div class="wf-line full" style="margin-bottom:3px"></div><div class="wf-line short" style="margin-bottom:0"></div></div>
+              <div style="font-size:9px;color:var(--text-muted)">2 h</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="wf-box">
+          <div class="panel-header-wf">
+            <span class="panel-title-wf">Mis tareas de hoy</span>
+            <span class="panel-link">+ Nueva</span>
+          </div>
+          <div class="mini-task-wf">
+            <div class="check-wf" style="background:var(--border-dark)"></div>
+            <div class="wf-line medium" style="margin:0;flex:1"></div>
+          </div>
+          <div class="mini-task-wf">
+            <div class="check-wf"></div>
+            <div class="wf-line full" style="margin:0;flex:1"></div>
+            <div class="pill-wf">Alta</div>
+          </div>
+          <div class="mini-task-wf">
+            <div class="check-wf"></div>
+            <div class="wf-line medium" style="margin:0;flex:1"></div>
+            <div class="pill-wf">Media</div>
+          </div>
+          <div class="mini-task-wf">
+            <div class="check-wf"></div>
+            <div class="wf-line full" style="margin:0;flex:1"></div>
+            <div class="pill-wf">Baja</div>
+          </div>
+          <div class="mini-task-wf">
+            <div class="check-wf"></div>
+            <div class="wf-line short" style="margin:0;flex:1"></div>
+            <div class="pill-wf">Media</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="screen" id="screen-chat">
+      <div class="chat-layout">
+        <div class="channel-list-wf">
+          <div class="panel-header-wf" style="padding:8px 10px"><span class="panel-title-wf">Canales</span><span class="panel-link">+</span></div>
+          <div class="channel-item-wf active"><span class="ch-hash">#</span> general</div>
+          <div class="channel-item-wf"><span class="ch-hash">#</span> desarrollo <span class="ch-badge">3</span></div>
+          <div class="channel-item-wf"><span class="ch-hash">#</span> diseño</div>
+          <div class="channel-item-wf"><span class="ch-hash">#</span> legal <span class="ch-badge">2</span></div>
+          <div class="channel-item-wf"><span class="ch-hash">#</span> soporte</div>
+          <div class="panel-header-wf" style="padding:8px 10px;margin-top:4px"><span class="panel-title-wf">Directos</span></div>
+          <div class="channel-item-wf">
+            <div class="avatar-wf" style="width:18px;height:18px;font-size:8px">ML</div>
+            María L.
+          </div>
+          <div class="channel-item-wf">
+            <div class="avatar-wf" style="width:18px;height:18px;font-size:8px">CM</div>
+            Carlos M.
+          </div>
+        </div>
+
+        <div class="chat-main-wf">
+          <div class="chat-header-wf">
+            <span style="font-size:14px;color:var(--text-muted)">#</span>
+            <div>
+              <div style="font-size:12px;font-weight:600">general</div>
+              <div style="font-size:9px;color:var(--text-muted)">Canal principal · 12 miembros</div>
+            </div>
+          </div>
+
+          <div class="chat-messages-wf">
+            <div class="msg-wf">
+              <div class="msg-av-wf"></div>
+              <div class="msg-body-wf">
+                <div class="msg-name-wf">Usuario A &nbsp;<span style="font-size:9px;color:var(--text-muted);font-weight:400">9:14 AM</span></div>
+                <div class="msg-bubble"><div class="wf-line full" style="margin-bottom:4px"></div><div class="wf-line medium" style="margin:0"></div></div>
+                <div class="msg-action-wf">
+                  <svg class="wf-ic" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                  Convertir en tarea
+                </div>
+              </div>
+            </div>
+            <div class="msg-wf">
+              <div class="msg-av-wf"></div>
+              <div class="msg-body-wf">
+                <div class="msg-name-wf">Usuario B &nbsp;<span style="font-size:9px;color:var(--text-muted);font-weight:400">9:22 AM</span></div>
+                <div class="msg-bubble"><div class="wf-line short" style="margin:0"></div></div>
+              </div>
+            </div>
+            <div class="msg-wf">
+              <div class="msg-av-wf" style="background:var(--surface-2);border-style:dashed"></div>
+              <div class="msg-body-wf">
+                <div class="msg-name-wf">[Asistente IA] &nbsp;<span style="font-size:9px;color:var(--text-muted);font-weight:400">9:22 AM</span></div>
+                <div class="msg-bubble" style="border-style:dashed"><div class="wf-line full" style="margin-bottom:4px"></div><div class="wf-line medium" style="margin:0"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-input-wf">
+            <div class="wf-input" style="flex:1;font-size:11px;color:var(--text-muted)">Escribe un mensaje en #general…</div>
+            <div class="wf-btn">Enviar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREAS -->
+    <div class="screen" id="screen-tasks">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div>
+          <div style="font-size:14px;font-weight:600">Tareas y proyectos</div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Proyecto activo · [barra de progreso]</div>
+          <div style="margin-top:5px;height:5px;width:200px;background:var(--surface-2);border:1px solid var(--border);border-radius:2px"><div style="width:75%;height:100%;background:var(--border-dark)"></div></div>
+        </div>
+        <div class="wf-btn primary">+ Nueva tarea</div>
+      </div>
+
+      <div class="kanban">
+        <div class="kanban-col-wf">
+          <div class="kanban-header-wf"><div class="col-dot-wf"></div><span style="font-size:11px;font-weight:600">Pendiente</span><span class="col-count-wf">3</span></div>
+          <div class="kanban-cards-wf">
+            <div class="k-card-wf"><div class="wf-line full"></div><div class="wf-line medium"></div><div class="k-card-meta-wf"><div class="pill-wf">Alta</div><div class="avatar-wf" style="width:18px;height:18px;font-size:8px;margin-left:auto">LR</div></div></div>
+            <div class="k-card-wf"><div class="wf-line full"></div><div class="k-card-meta-wf"><div class="pill-wf">Media</div><div class="avatar-wf" style="width:18px;height:18px;font-size:8px;margin-left:auto">CM</div></div></div>
+            <div class="k-card-wf"><div class="wf-line medium"></div><div class="k-card-meta-wf"><div class="pill-wf">Baja</div><div class="avatar-wf" style="width:18px;height:18px;font-size:8px;margin-left:auto">ML</div></div></div>
+          </div>
+        </div>
+        <div class="kanban-col-wf">
+          <div class="kanban-header-wf"><div class="col-dot-wf"></div><span style="font-size:11px;font-weight:600">En progreso</span><span class="col-count-wf">2</span></div>
+          <div class="kanban-cards-wf">
+            <div class="k-card-wf"><div class="wf-line full"></div><div class="wf-line medium"></div><div class="k-card-meta-wf"><div class="pill-wf">Alta</div><div class="avatar-wf" style="width:18px;height:18px;font-size:8px;margin-left:auto">LR</div></div></div>
+            <div class="k-card-wf"><div class="wf-line full"></div><div class="k-card-meta-wf"><div class="pill-wf">Media</div><div class="avatar-wf" style="width:18px;height:18px;font-size:8px;margin-left:auto">ML</div></div></div>
+          </div>
+        </div>
+        <div class="kanban-col-wf">
+          <div class="kanban-header-wf"><div class="col-dot-wf"></div><span style="font-size:11px;font-weight:600">Revisión</span><span class="col-count-wf">2</span></div>
+          <div class="kanban-cards-wf">
+            <div class="k-card-wf"><div class="wf-line full"></div><div class="k-card-meta-wf"><div class="pill-wf">Alta</div><div class="avatar-wf" style="width:18px;height:18px;font-size:8px;margin-left:auto">CM</div></div></div>
+            <div class="k-card-wf"><div class="wf-line medium"></div><div class="k-card-meta-wf"><div class="pill-wf">Media</div><div class="avatar-wf" style="width:18px;height:18px;font-size:8px;margin-left:auto">LR</div></div></div>
+          </div>
+        </div>
+        <div class="kanban-col-wf">
+          <div class="kanban-header-wf"><div class="col-dot-wf"></div><span style="font-size:11px;font-weight:600">Completado</span><span class="col-count-wf">3</span></div>
+          <div class="kanban-cards-wf">
+            <div class="k-card-wf" style="opacity:0.5"><div class="wf-line full" style="text-decoration:line-through"></div></div>
+            <div class="k-card-wf" style="opacity:0.5"><div class="wf-line medium"></div></div>
+            <div class="k-card-wf" style="opacity:0.5"><div class="wf-line short"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODO AGENTE -->
+    <div class="screen" id="screen-agent">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div>
+          <div style="font-size:14px;font-weight:600">Modo Agente</div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Control del entorno mediante lenguaje natural · Confirmación humana requerida</div>
+        </div>
+        <div class="wf-btn" style="display:flex;align-items:center;gap:5px;">
+          <div style="width:7px;height:7px;border-radius:50%;border:1.5px solid var(--border-dark);background:var(--surface-2)"></div>
+          Agente activo
+        </div>
+      </div>
+
+      <div class="agent-layout">
+        <!-- Terminal -->
+        <div class="agent-terminal-wf">
+          <div class="term-header-wf">
+            <div class="term-dots-wf">
+              <div class="term-dot-wf"></div>
+              <div class="term-dot-wf"></div>
+              <div class="term-dot-wf"></div>
+            </div>
+            <span class="term-title">workos-agent — terminal</span>
+            <div class="term-status"><div class="term-pulse"></div>listo</div>
+          </div>
+
+          <div class="term-body-wf">
+            <div class="term-line term-user">
+              <span class="term-prefix">usuario &gt;</span>
+              <span class="term-text">organiza los archivos de la carpeta Descargas por tipo</span>
+            </div>
+            <div class="term-line">
+              <span class="term-prefix">agente  &gt;</span>
+              <span class="term-text">Analizando /Descargas… 48 archivos encontrados.</span>
+            </div>
+            <div class="term-line">
+              <span class="term-prefix">agente  &gt;</span>
+              <span class="term-text">Plan: crear subcarpetas /Imágenes, /Documentos, /Videos, /Otros.</span>
+            </div>
+
+            <div class="term-confirm">
+              <div class="term-confirm-title">⚠ Confirmación requerida — acción sobre sistema de archivos</div>
+              <div class="term-code">
+                mkdir Imágenes Documentos Videos Otros<br>
+                mv *.jpg *.png → Imágenes/ (18 archivos)<br>
+                mv *.pdf *.docx → Documentos/ (22 archivos)
+              </div>
+              <div class="term-btns">
+                <button class="term-btn">Permitir</button>
+                <button class="term-btn">Cancelar</button>
+              </div>
+            </div>
+
+            <div class="term-line term-user">
+              <span class="term-prefix">usuario &gt;</span>
+              <span class="term-text">Permitir</span>
+            </div>
+            <div class="term-line">
+              <span class="term-prefix">agente  &gt;</span>
+              <span class="term-text">✓ 44 archivos reorganizados correctamente.</span>
+            </div>
+          </div>
+
+          <!-- SECCIÓN DE VOZ -->
+          <div class="voice-bar">
+            <div class="voice-label">■ Entrada por voz</div>
+            <div class="voice-row">
+              <!-- Botón micrófono -->
+              <div class="mic-btn-wf active">
+                <svg style="width:14px;height:14px;fill:none;stroke:#aaa;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24">
+                  <rect x="9" y="2" width="6" height="12" rx="3"/>
+                  <path d="M19 10a7 7 0 0 1-14 0M12 19v3M8 22h8"/>
+                </svg>
+              </div>
+
+              <!-- Visualizador de onda -->
+              <div class="waveform">
+                <div class="wf-bar" style="height:6px"></div>
+                <div class="wf-bar" style="height:14px"></div>
+                <div class="wf-bar" style="height:20px"></div>
+                <div class="wf-bar" style="height:10px"></div>
+                <div class="wf-bar" style="height:24px"></div>
+                <div class="wf-bar" style="height:16px"></div>
+                <div class="wf-bar" style="height:8px"></div>
+                <div class="wf-bar" style="height:20px"></div>
+                <div class="wf-bar" style="height:12px"></div>
+                <div class="wf-bar" style="height:6px"></div>
+                <div class="wf-bar" style="height:18px"></div>
+                <div class="wf-bar" style="height:22px"></div>
+                <div class="wf-bar" style="height:10px"></div>
+                <div class="wf-bar" style="height:14px"></div>
+                <div class="wf-bar" style="height:8px"></div>
+              </div>
+
+              <div class="voice-status">0:04</div>
+            </div>
+
+            <!-- Input de texto alternativo -->
+            <div class="text-input-row">
+              <input class="term-input-wf" type="text" placeholder="…o escribe un comando al agente">
+              <button class="term-btn" style="padding:4px 12px">Enviar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel lateral -->
+        <div class="agent-side-wf">
+          <div class="agent-panel-wf">
+            <div class="panel-header-wf">
+              <span class="panel-title-wf">Permisos activos</span>
+            </div>
+            <div class="perm-item">Sistema de archivos <div class="toggle-wf on"></div></div>
+            <div class="perm-item">Correo electrónico <div class="toggle-wf on"></div></div>
+            <div class="perm-item">Navegador web <div class="toggle-wf off"></div></div>
+            <div class="perm-item">Aplicaciones <div class="toggle-wf off"></div></div>
+            <div class="perm-item">Almacenamiento nube <div class="toggle-wf on"></div></div>
+          </div>
+
+          <div class="agent-panel-wf">
+            <div class="panel-header-wf"><span class="panel-title-wf">Acciones recientes</span></div>
+            <div class="action-item-wf">
+              <div class="wf-line full" style="margin:0;flex:1"></div>
+              <span style="font-size:9px;border:1px solid var(--border);padding:1px 4px;border-radius:2px">✓</span>
+            </div>
+            <div class="action-item-wf">
+              <div class="wf-line medium" style="margin:0;flex:1"></div>
+              <span style="font-size:9px;border:1px solid var(--border);padding:1px 4px;border-radius:2px">…</span>
+            </div>
+            <div class="action-item-wf">
+              <div class="wf-line full" style="margin:0;flex:1"></div>
+              <span style="font-size:9px;border:1px solid var(--border);padding:1px 4px;border-radius:2px">✓</span>
+            </div>
+          </div>
+
+          <div class="agent-panel-wf">
+            <div class="panel-header-wf"><span class="panel-title-wf">Comandos rápidos de voz</span></div>
+            <div style="padding:10px 12px;display:flex;flex-direction:column;gap:5px;">
+              <div style="font-size:9px;color:var(--text-muted);border:1px dashed var(--border);border-radius:2px;padding:5px 8px;">"Organiza mis archivos de hoy"</div>
+              <div style="font-size:9px;color:var(--text-muted);border:1px dashed var(--border);border-radius:2px;padding:5px 8px;">"Redacta un correo a [nombre]"</div>
+              <div style="font-size:9px;color:var(--text-muted);border:1px dashed var(--border);border-radius:2px;padding:5px 8px;">"¿Qué tareas tengo pendientes?"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDITOR -->
+    <div class="screen" id="screen-editor">
+      <div class="editor-layout">
+        <div class="editor-main-wf">
+          <div class="editor-toolbar-wf">
+            <div class="tool-wf active">Doc</div>
+            <div class="tool-wf">Hoja</div>
+            <div class="tool-wf">Presentación</div>
+            <div class="tool-divider-wf"></div>
+            <div class="tool-wf"><strong>N</strong></div>
+            <div class="tool-wf"><em>I</em></div>
+            <div class="tool-wf"><u>S</u></div>
+            <div class="tool-divider-wf"></div>
+            <div class="tool-wf">H1</div>
+            <div class="tool-wf">H2</div>
+            <div class="tool-wf">Lista</div>
+            <div class="tool-wf">Tabla</div>
+            <div class="tool-divider-wf"></div>
+            <div class="tool-wf" style="margin-left:auto;font-weight:600">[✦ IA]</div>
+          </div>
+
+          <div class="editor-body">
+            <div class="doc-title-wf">Informe de avance — Proyecto</div>
+            <div class="doc-meta-wf">
+              <span>Editado por Leonel R. · hace 5 min</span>
+              <span>·</span>
+              <span>Guardado ✓</span>
+              <span>·</span>
+              <span>Compartido con 3</span>
+            </div>
+
+            <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--text)">Resumen ejecutivo</div>
+            <div class="wf-line full"></div>
+            <div class="wf-line full"></div>
+            <div class="wf-line medium"></div>
+
+            <div class="ai-suggestion-wf">
+              <span style="font-size:12px">[✦]</span>
+              <span><strong>Sugerencia IA:</strong> Puedes agregar los indicadores clave de rendimiento (KPIs) del período para reforzar el resumen. ¿Genero automáticamente?</span>
+            </div>
+
+            <div style="font-size:12px;font-weight:600;margin:16px 0 8px;color:var(--text)">Estado de tareas</div>
+            <div class="wf-line full"></div>
+            <div class="wf-line full"></div>
+            <div class="wf-line short"></div>
+
+            <div style="font-size:12px;font-weight:600;margin:16px 0 8px;color:var(--text)">Próximos pasos</div>
+            <div class="wf-line full"></div>
+            <div class="wf-line medium"></div>
+          </div>
+        </div>
+
+        <div class="ai-panel-wf">
+          <div class="panel-header-wf">
+            <span class="panel-title-wf">[✦] Asistente del documento</span>
+          </div>
+          <div class="ai-messages-wf">
+            <div class="ai-msg-wf bot"><div class="wf-line full"></div><div class="wf-line medium" style="margin:0"></div></div>
+            <div class="ai-msg-wf user"><div class="wf-line short" style="margin:0"></div></div>
+            <div class="ai-msg-wf bot"><div class="wf-line full"></div><div class="wf-line full"></div><div class="wf-line xshort" style="margin:0"></div></div>
+          </div>
+          <div style="border-top:1.5px solid var(--border);padding:10px;display:flex;gap:6px;">
+            <div class="wf-input" style="flex:1;font-size:10px">Pregunta sobre el doc…</div>
+            <div class="wf-btn">→</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const titles = {
+  dashboard:'Dashboard', chat:'Mensajería', tasks:'Tareas y proyectos', agent:'Modo Agente', editor:'Editor de documentos'
+};
+
+function showScreen(id, navEl) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  navEl.classList.add('active');
+  document.getElementById('topbar-title').textContent = titles[id];
+}
+</script>
+</body>
+</html>
